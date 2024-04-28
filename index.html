@@ -25,6 +25,12 @@
         }
         .address {
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between; /* Align text and value to opposite sides */
+            align-items: center; /* Center vertically */
+        }
+        .address p {
+            margin: 0; /* Remove default margin */
         }
         .note {
             background-color: #f9f9f9;
@@ -37,21 +43,25 @@
 <body>
     <div class="container">
         <h1>My Cryptocurrency Addresses</h1>
-        <div class="address">
+        <div class="address" id="btc">
             <h2>Bitcoin (BTC)</h2>
             <p>bc1qvs2naxfedg5qx4mm4ty7s64kqj66rj2jcxexjx</p>
+            <p id="btc-value">$XXXXX</p> <!-- Placeholder for BTC value -->
         </div>
-        <div class="address">
+        <div class="address" id="eth">
             <h2>Ethereum (ETH)</h2>
             <p>0x1E1257c20f974Ec184df23aCE0C98e1e89a2523C</p>
+            <p id="eth-value">$XXXXX</p> <!-- Placeholder for ETH value -->
         </div>
-        <div class="address">
+        <div class="address" id="ltc">
             <h2>Litcoin (LTC)</h2>
             <p>Le4oLkns7SBZ1KZ2CKLm1hjg7Z69VcKzb6</p>
+            <p id="ltc-value">$XXXXX</p> <!-- Placeholder for LTC value -->
         </div>
-        <div class="address">
+        <div class="address" id="bch">
             <h2>Bitcoin Cash (BCH)</h2>
             <p>qqrmk9yscwcz7jksmjkm35wzvxf50asp4cnygp4cmy</p>
+            <p id="bch-value">$XXXXX</p> <!-- Placeholder for BCH value -->
         </div>
         <!-- Add more cryptocurrency addresses here -->
 
@@ -59,5 +69,22 @@
             <p><strong>Note:</strong> All coins on the Ethereum Network go to my ETH address. I am running a Multi-Currency wallet.</p>
         </div>
     </div>
+
+    <script>
+        // Fetch data from CoinGecko API
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,bitcoin-cash&vs_currencies=usd')
+            .then(response => response.json())
+            .then(data => {
+                // Update Bitcoin (BTC) value
+                document.getElementById('btc-value').textContent = '$' + data.bitcoin.usd.toFixed(2);
+                // Update Ethereum (ETH) value
+                document.getElementById('eth-value').textContent = '$' + data.ethereum.usd.toFixed(2);
+                // Update Litecoin (LTC) value
+                document.getElementById('ltc-value').textContent = '$' + data.litecoin.usd.toFixed(2);
+                // Update Bitcoin Cash (BCH) value
+                document.getElementById('bch-value').textContent = '$' + data['bitcoin-cash'].usd.toFixed(2);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
 </body>
 </html>
