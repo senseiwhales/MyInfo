@@ -26,17 +26,49 @@
         .address {
             margin-bottom: 10px;
             display: flex;
-            justify-content: space-between; /* Align text and value to opposite sides */
-            align-items: center; /* Center vertically */
+            justify-content: space-between;
+            align-items: center;
         }
         .address p {
-            margin: 0; /* Remove default margin */
+            margin: 0;
         }
         .note {
             background-color: #f9f9f9;
             border-left: 6px solid #7f7f7f;
             padding: 10px;
             margin-top: 20px;
+        }
+        .qr-code-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            overflow: auto;
+        }
+        .qr-code-modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            max-width: 300px;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -46,22 +78,22 @@
         <div class="address" id="btc">
             <h2>Bitcoin (BTC)</h2>
             <p>bc1qvs2naxfedg5qx4mm4ty7s64kqj66rj2jcxexjx</p>
-            <p id="btc-value">$XXXXX</p> <!-- Placeholder for BTC value -->
+            <button onclick="showQRCode('btc')">Show QR Code</button>
         </div>
         <div class="address" id="eth">
             <h2>Ethereum (ETH)</h2>
             <p>0x1E1257c20f974Ec184df23aCE0C98e1e89a2523C</p>
-            <p id="eth-value">$XXXXX</p> <!-- Placeholder for ETH value -->
+            <button onclick="showQRCode('eth')">Show QR Code</button>
         </div>
         <div class="address" id="ltc">
             <h2>Litcoin (LTC)</h2>
             <p>Le4oLkns7SBZ1KZ2CKLm1hjg7Z69VcKzb6</p>
-            <p id="ltc-value">$XXXXX</p> <!-- Placeholder for LTC value -->
+            <button onclick="showQRCode('ltc')">Show QR Code</button>
         </div>
         <div class="address" id="bch">
             <h2>Bitcoin Cash (BCH)</h2>
             <p>qqrmk9yscwcz7jksmjkm35wzvxf50asp4cnygp4cmy</p>
-            <p id="bch-value">$XXXXX</p> <!-- Placeholder for BCH value -->
+            <button onclick="showQRCode('bch')">Show QR Code</button>
         </div>
         <!-- Add more cryptocurrency addresses here -->
 
@@ -70,21 +102,25 @@
         </div>
     </div>
 
+    <div id="qrCodeModal" class="qr-code-modal">
+        <div class="qr-code-modal-content">
+            <span class="close" onclick="closeQRCodeModal()">&times;</span>
+            <img id="qrCodeImage" src="" alt="QR Code">
+        </div>
+    </div>
+
     <script>
-        // Fetch data from CoinGecko API
-        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,bitcoin-cash&vs_currencies=usd')
-            .then(response => response.json())
-            .then(data => {
-                // Update Bitcoin (BTC) value
-                document.getElementById('btc-value').textContent = '$' + data.bitcoin.usd.toFixed(2);
-                // Update Ethereum (ETH) value
-                document.getElementById('eth-value').textContent = '$' + data.ethereum.usd.toFixed(2);
-                // Update Litecoin (LTC) value
-                document.getElementById('ltc-value').textContent = '$' + data.litecoin.usd.toFixed(2);
-                // Update Bitcoin Cash (BCH) value
-                document.getElementById('bch-value').textContent = '$' + data['bitcoin-cash'].usd.toFixed(2);
-            })
-            .catch(error => console.error('Error fetching data:', error));
+        function showQRCode(crypto) {
+            var qrCodeImage = document.getElementById('qrCodeImage');
+            qrCodeImage.src = 'qr_codes/' + crypto + '.png'; // Update path to your QR code images
+            var qrCodeModal = document.getElementById('qrCodeModal');
+            qrCodeModal.style.display = 'block';
+        }
+
+        function closeQRCodeModal() {
+            var qrCodeModal = document.getElementById('qrCodeModal');
+            qrCodeModal.style.display = 'none';
+        }
     </script>
 </body>
 </html>
